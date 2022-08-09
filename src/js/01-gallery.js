@@ -5,7 +5,7 @@ import { galleryItems } from './gallery-items';
 
 console.log(galleryItems);
 
-import SimpleLightbox from "simplelightbox";
+import SimpleLightbox from 'simplelightbox';
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 const galleryCollection = document.querySelector(".gallery");
