@@ -1,50 +1,37 @@
-// import { throttle } from 'lodash';
-
-// const input = document.querySelector('.input-form')
-// input.addEventListener('input', handlerSubmit)
-
-// function handlerSubmit(e) {
-//     e.preventDefault();
-//     console.log(e.target.elements)
-//     let { email, password } = e.target.elements;
-//     console.dir(password.value);
-//     console.dir(email.value);
-// }
-
 
 import { throttle } from 'lodash';
 
-const form = document.querySelector('.feedback-form');
-const email = document.querySelector('input[name="email"]');
-const message = document.querySelector('textarea[name="message"]');
-const LOCALSTORAGE_KEY = 'feedback-form-state';
+const form = document.querySelector('.feedback-form')
+const inputForm = document.querySelector('input')
+const message = document.querySelector('textarea')
 
-form.addEventListener(
-  'input',
-  throttle(e => {
-    const objectToSave = { email: email.value, message: message.value };
-    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(objectToSave));
-  }, 500)
-);
+const localKey = 'feedback-form-state'
 
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  console.log({ email: email.value, message: message.value });
+form.addEventListener('input', throttle(() => {
+  const fieldsValue = {email: inputForm.value, message: message.value}
+  localStorage.setItem('feedback-form-state', JSON.stringify(fieldsValue));
+}, 500))
+
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  console.log({email: inputForm.value, message: message.value});
   form.reset();
-  localStorage.removeItem(LOCALSTORAGE_KEY);
-});
+  localStorage.removeItem(localKey);
+})
 
-const load = key => {
+
+const load = k => {
   try {
-    const serializedState = localStorage.getItem(key);
+    const serializedState = localStorage.getItem(k);
     return serializedState === null ? undefined : JSON.parse(serializedState);
   } catch (error) {
-    console.error('Get state error: ', error.message);
+    console.error("Get state error: ", error.message);
   }
 };
 
-const storageData = load(LOCALSTORAGE_KEY);
-if (storageData) {
-  email.value = storageData.email;
-  message.value = storageData.message;
+const storageBank = load(localKey);
+if (storageBank) {
+  inputForm.value = storageBank.email;
+  message.value = storageBank.message;
 }
